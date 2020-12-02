@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Material Design Bootstrap</title>
+  <title>COVID-19 State Comparison</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -13,7 +13,7 @@
   <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
-  <link href="css/style.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
   <style type="text/css">
     html,
     body,
@@ -63,8 +63,14 @@
           }),
           contentType: 'application/json',
           success: function(result){
-            $("#result").html(result['body']);
-            $("#result").html("<p>Success</p>");
+            console.log(result)
+            $("#result").html("<p>See Comparison Below!</p>");
+            $("#state1_result").html($("#state1").val());
+            $("#state1_cases").html(result['state1cases'] + " Cases");
+            $("#state1_deaths").html(result['state1deaths'] + " Deaths");
+            $("#state2_result").html($("#state2").val());
+            $("#state2_cases").html(result['state2cases'] + " Cases");
+            $("#state2_deaths").html(result['state2deaths'] + " Deaths");
           },
           error: function ajaxError(jqXHR, textStatus, errorThrown) {
               console.error('Error: ', textStatus, ', Details: ', errorThrown);
@@ -122,7 +128,7 @@
             </p>
 
             <p class="mb-4 d-none d-md-block">
-              <strong>The purpose of this project is to create an effective AWS powered web service to analyze COVID-19 data and serve as a platform for anyone needing information about the danger of Covid in a city by providing a comparison of that city with another city picked. This app uses AWS Amplify to display the front end, and AWS API for the backend.</strong>
+              <strong>The purpose of this project is to create an AWS powered web service to analyze COVID-19 data by state. The application uses the Python COVID-19 API for the state data. This app also uses AWS Amplify to display the front end, and AWS API for the backend.</strong>
             </p>
           </div>
           <!--Grid column-->
@@ -173,7 +179,7 @@
                 </form>
                 <!-- Form -->
                 <div class="text-center" id="result">
-                  <p>asdasdasd</p>
+                  <p></p>
                 </div>
 
               </div>
@@ -212,13 +218,13 @@
           <div class="col-lg-6 col-md-12 px-4">
 
             <!--First row-->
-            <div class="row">
+            <div class="row" id="data">
               <div class="col-1 mr-3">
-                <i class="fas fa-code fa-2x indigo-text"></i>
+                <img class="tiny_icons" src="img/location.png" alt="location marker">
               </div>
               <div class="col-10">
-                <h5 class="feature-title">Bootstrap 4</h5>
-                <p class="grey-text">Thanks to MDB you can take advantage of all feature of newest Bootstrap 4.</p>
+                <h5 class="feature-title" id="state1_result">State 1</h5>
+                <p class="grey-text">State 1</p>
               </div>
             </div>
             <!--/First row-->
@@ -228,13 +234,11 @@
             <!--Second row-->
             <div class="row">
               <div class="col-1 mr-3">
-                <i class="fas fa-book fa-2x blue-text"></i>
+                <img class="tiny_icons" src="img/virus.png" alt="location marker">
               </div>
               <div class="col-10">
-                <h5 class="feature-title">Detailed documentation</h5>
-                <p class="grey-text">We give you detailed user-friendly documentation at your disposal. It will help you to implement your ideas
-                  easily.
-                </p>
+                <h5 class="feature-title" id="state1_cases">COVID-19 Cases</h5>
+                <p class="grey-text">Reported # of COVID-19 cases</p>
               </div>
             </div>
             <!--/Second row-->
@@ -244,12 +248,57 @@
             <!--Third row-->
             <div class="row">
               <div class="col-1 mr-3">
-                <i class="fas fa-graduation-cap fa-2x cyan-text"></i>
+                <img class="tiny_icons" src="img/death.png" alt="location marker">
               </div>
               <div class="col-10">
-                <h5 class="feature-title">Lots of tutorials</h5>
-                <p class="grey-text">We care about the development of our users. We have prepared numerous tutorials, which allow you to learn
-                  how to use MDB as well as other technologies.</p>
+                <h5 class="feature-title" id="state1_deaths"> COVID-19 Deaths</h5>
+                <p class="grey-text">Reported # of COVID-19 deaths</p>
+              </div>
+            </div>
+            <!--/Third row-->
+
+          </div>
+          <!--/Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-6 col-md-12 px-4">
+
+            <!--First row-->
+            <div class="row" id="data">
+              <div class="col-1 mr-3">
+                <img class="tiny_icons" src="img/location2.png" alt="location marker">
+              </div>
+              <div class="col-10">
+                <h5 class="feature-title" id="state2_result">State 2</h5>
+                <p class="grey-text">State 2</p>
+              </div>
+            </div>
+            <!--/First row-->
+
+            <div style="height:30px"></div>
+
+            <!--Second row-->
+            <div class="row">
+              <div class="col-1 mr-3">
+                <img class="tiny_icons" src="img/virus.png" alt="location marker">
+              </div>
+              <div class="col-10">
+                <h5 class="feature-title" id="state2_cases">COVID-19 Cases</h5>
+                <p class="grey-text">Reported # of COVID-19 cases</p>
+              </div>
+            </div>
+            <!--/Second row-->
+
+            <div style="height:30px"></div>
+
+            <!--Third row-->
+            <div class="row">
+              <div class="col-1 mr-3">
+                <img class="tiny_icons" src="img/death.png" alt="location marker">
+              </div>
+              <div class="col-10">
+                <h5 class="feature-title" id="state2_deaths"> COVID-19 Deaths</h5>
+                <p class="grey-text">Reported # of COVID-19 deaths</p>
               </div>
             </div>
             <!--/Third row-->
@@ -606,11 +655,11 @@
 
   <!--Footer-->
   <footer class="page-footer text-center font-small mt-4 wow fadeIn">
-    <!--Copyright-->
-    <div class="footer-copyright py-3">
-      © 2019 Copyright:
+    <!--Footer-->
+    <div class="footer py-3">
+      Thank You!
     </div>
-    <!--/.Copyright-->
+    <!--/.Footer-->
 
   </footer>
   <!--/.Footer-->
