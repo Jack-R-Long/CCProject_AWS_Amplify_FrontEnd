@@ -58,12 +58,12 @@
           headers: {
           },
           data: JSON.stringify({
-              state1: $("#state1"),
-              state2: $("#state2"),
+              state1: $("#state1").val(),
+              state2: $("#state2").val(),
           }),
           contentType: 'application/json',
           success: function(result){
-            $("#result").html(result);
+            $("#result").html(result['body']);
             $("#result").html("<p>Success</p>");
           },
           error: function ajaxError(jqXHR, textStatus, errorThrown) {
