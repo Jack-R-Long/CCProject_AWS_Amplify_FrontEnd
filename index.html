@@ -48,31 +48,34 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
   $(document).ready(function(){
-    $("button").click(function(){
+    $('#compare').on('submit', function(e) {
+    e.preventDefault();
+
       $.ajax({
-        method: 'POST',
-        url:  'https://jvlkzjqu24.execute-api.us-east-2.amazonaws.com/prod' + '/coviddata',
-        crossDomain: true,
-        headers: {
-        },
-        data: JSON.stringify({
-            state1: $("#state1"),
-            state2: $("#state2"),
-        }),
-        contentType: 'application/json',
-        success: function(result){
-          $("#result").html(result);
-          $("#result").html("<p>HI</p>");
-        },
-        error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
-            alert('An error occured:\n' + jqXHR.responseText);
-            $("#result").html(errorThrown);
-        }
-      });
+          method: 'POST',
+          url:  'https://jvlkzjqu24.execute-api.us-east-2.amazonaws.com/prod' + '/coviddata',
+          crossDomain: true,
+          headers: {
+          },
+          data: JSON.stringify({
+              state1: $("#state1"),
+              state2: $("#state2"),
+          }),
+          contentType: 'application/json',
+          success: function(result){
+            $("#result").html(result);
+            $("#result").html("<p>Success</p>");
+          },
+          error: function ajaxError(jqXHR, textStatus, errorThrown) {
+              console.error('Error: ', textStatus, ', Details: ', errorThrown);
+              console.error('Response: ', jqXHR.responseText);
+              alert('An error occured:\n' + jqXHR.responseText);
+              $("#result").html("<p>Failure</p>");
+          }
+        });
     });
-  });
+      
+    });
   </script>
 </head>
 
@@ -134,7 +137,7 @@
               <div class="card-body">
 
                 <!-- Form -->
-                <form name="compare">
+                <form name="compare" id="compare">
                   <!-- Heading -->
                   <h3 class="dark-grey-text text-center">
                     <strong>Compare States</strong>
