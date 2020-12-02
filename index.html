@@ -63,7 +63,7 @@
           }),
           contentType: 'application/json',
           success: function(result){
-            $("#result").html(result);
+            $("#result").html(result['body']);
             $("#result").html("<p>Success</p>");
           },
           error: function ajaxError(jqXHR, textStatus, errorThrown) {
