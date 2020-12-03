@@ -47,40 +47,73 @@
   </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-  $(document).ready(function(){
-    $('#compare').on('submit', function(e) {
-    e.preventDefault();
-
-      $.ajax({
-          method: 'POST',
-          url:  'https://jvlkzjqu24.execute-api.us-east-2.amazonaws.com/prod' + '/coviddata',
-          crossDomain: true,
-          headers: {
-          },
-          data: JSON.stringify({
-              state1: $("#state1").val(),
-              state2: $("#state2").val(),
-          }),
-          contentType: 'application/json',
-          success: function(result){
-            console.log(result)
-            $("#result").html("<p>See Comparison Below!</p>");
-            $("#state1_result").html($("#state1").val());
-            $("#state1_cases").html(result['state1cases'] + " Cases");
-            $("#state1_deaths").html(result['state1deaths'] + " Deaths");
-            $("#state2_result").html($("#state2").val());
-            $("#state2_cases").html(result['state2cases'] + " Cases");
-            $("#state2_deaths").html(result['state2deaths'] + " Deaths");
-          },
-          error: function ajaxError(jqXHR, textStatus, errorThrown) {
-              console.error('Error: ', textStatus, ', Details: ', errorThrown);
-              console.error('Response: ', jqXHR.responseText);
-              alert('An error occured:\n' + jqXHR.responseText);
-              $("#result").html("<p>Failure</p>");
-          }
+    var covid_data = {
+      message: "not run",
+      state1cases: 0,
+      state1deaths: 0,
+      state2cases: 0,
+      state2deaths: 0
+    };
+    $(document).ready(function(){
+      $('#compare').on('submit', function(e) {
+      e.preventDefault();
+        $.ajax({
+            method: 'POST',
+            url:  'https://jvlkzjqu24.execute-api.us-east-2.amazonaws.com/prod' + '/coviddata',
+            crossDomain: true,
+            headers: {
+            },
+            data: JSON.stringify({
+                state1: $("#state1").val(),
+                state2: $("#state2").val(),
+            }),
+            contentType: 'application/json',
+            success: function(result){
+              console.log(result)
+              covid_data = result;
+              covid_data['state1'] = $("#state1").val()
+              covid_data['state2'] = $("#state2").val()
+              $("#result").html("<p>See Comparison Below!</p>");
+              $("#state1_result").html($("#state1").val());
+              $("#state1_cases").html(result['state1cases'] + " Cases");
+              $("#state1_deaths").html(result['state1deaths'] + " Deaths");
+              $("#state2_result").html($("#state2").val());
+              $("#state2_cases").html(result['state2cases'] + " Cases");
+              $("#state2_deaths").html(result['state2deaths'] + " Deaths");
+              myChart.update();
+            },
+            error: function ajaxError(jqXHR, textStatus, errorThrown) {
+                console.error('Error: ', textStatus, ', Details: ', errorThrown);
+                console.error('Response: ', jqXHR.responseText);
+                alert('An error occured:\n' + jqXHR.responseText);
+                $("#result").html("<p>Failure</p>");
+            }
+          });
+      });
+      $('#chartdata').click(function(e) {
+        myChart.data.labels.push(
+            covid_data['state1'] + " Cases", 
+            covid_data['state1'] + " Deaths", 
+            covid_data['state2'] + " Cases", 
+            covid_data['state2'] + " Deaths", 
+        );
+        myChart.data.datasets.push({
+          label: covid_data['state1'] +' and ' + covid_data['state2'],
+          data: [
+            covid_data['state1cases'], 
+            covid_data['state1deaths'], 
+            covid_data['state2cases'], 
+            covid_data['state2deaths']
+            ],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+          ],
         });
-    });
-      
+        myChart.update();
+      })
     });
   </script>
 </head>
@@ -310,6 +343,23 @@
         <!--/Grid row-->
 
       </section>
+      
+      <hr class="my-5">
+
+      <!--Section: Graph-->
+      <section>
+
+        <h2 class="my-5 h3 text-center">Graph</h2>
+        <div class="text-center">
+          <button class="btn btn-indigo" id="chartdata">Chart</button>
+        </div>
+        
+        <div class="container" style="width: 75%">
+          <canvas id="myChart" width="100" height="50"></canvas>        
+        </div>
+
+      </section>
+      <!--Section: Graph-->
 
       <hr class="my-5">
 
@@ -350,91 +400,6 @@
       </section>
       <!--Section: Main info-->
 
-      <hr class="my-5">
-
-      <!--Section: More-->
-      <section>
-
-        <h2 class="my-5 h3 text-center">Graph</h2>
-
-        <canvas id="myChart" width="400" height="400"></canvas>
-
-
-        <!--Second row-->
-        <div class="row features-small mt-4 wow fadeIn">
-
-          <!--Grid column-->
-          <div class="col-xl-3 col-lg-6">
-            <!--Grid row-->
-            <div class="row">
-              <div class="col-2">
-                <i class="fas fa-cubes fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-              </div>
-              <div class="col-10 mb-2">
-                <h5 class="feature-title font-bold mb-1">Modularity</h5>
-                <p class="grey-text mt-2">Material Design for Bootstrap comes with both, compiled, ready to use libraries including all features as
-                  well as modules for CSS (SASS files) and JS.</p>
-              </div>
-            </div>
-            <!--/Grid row-->
-          </div>
-          <!--/Grid column-->
-
-          <!--Grid column-->
-          <div class="col-xl-3 col-lg-6">
-            <!--Grid row-->
-            <div class="row">
-              <div class="col-2">
-                <i class="fas fa-question fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-              </div>
-              <div class="col-10 mb-2">
-                <h5 class="feature-title font-bold mb-1">Technical support</h5>
-                <p class="grey-text mt-2">We care about reliability. If you have any questions - do not hesitate to contact us.
-                </p>
-              </div>
-            </div>
-            <!--/Grid row-->
-          </div>
-          <!--/Grid column-->
-
-          <!--Grid column-->
-          <div class="col-xl-3 col-lg-6">
-            <!--Grid row-->
-            <div class="row">
-              <div class="col-2">
-                <i class="fas fa-th fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-              </div>
-              <div class="col-10 mb-2">
-                <h5 class="feature-title font-bold mb-1">Flexbox</h5>
-                <p class="grey-text mt-2">MDB fully supports Flex Box. You can forget about alignment issues.</p>
-              </div>
-            </div>
-            <!--/Grid row-->
-          </div>
-          <!--/Grid column-->
-
-          <!--Grid column-->
-          <div class="col-xl-3 col-lg-6">
-            <!--Grid row-->
-            <div class="row">
-              <div class="col-2">
-                <i class="far fa-file-code fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-              </div>
-              <div class="col-10 mb-2">
-                <h5 class="feature-title font-bold mb-1">SASS files</h5>
-                <p class="grey-text mt-2">Arranged and well documented .scss files can't wait until you compile them.</p>
-              </div>
-            </div>
-            <!--/Grid row-->
-          </div>
-          <!--/Grid column-->
-
-        </div>
-        <!--/Second row-->
-
-      </section>
-      <!--Section: More-->
-
     </div>
   </main>
   <!--Main layout-->
@@ -466,28 +431,7 @@
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+            
         },
         options: {
             scales: {
