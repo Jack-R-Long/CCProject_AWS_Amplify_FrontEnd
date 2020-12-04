@@ -55,6 +55,8 @@
       state2deaths: 0
     };
     $(document).ready(function(){
+      $('#chartdata').hide();
+      $('#removedata').hide();
       $('#compare').on('submit', function(e) {
       e.preventDefault();
         $.ajax({
@@ -81,6 +83,7 @@
               $("#state2_cases").html(result['state2cases'] + " Cases");
               $("#state2_deaths").html(result['state2deaths'] + " Deaths");
               myChart.update();
+              $('#chartdata').show();
             },
             error: function ajaxError(jqXHR, textStatus, errorThrown) {
                 console.error('Error: ', textStatus, ', Details: ', errorThrown);
@@ -112,6 +115,14 @@
               'rgba(75, 192, 192, 0.2)'
           ],
         });
+        myChart.update();
+        $('#removedata').show();
+      })
+      $('#removedata').click(function(e) {
+        for (i=0; i<4; i++){
+          myChart.data.labels.pop();
+        }
+        myChart.data.datasets.pop();
         myChart.update();
       })
     });
@@ -351,11 +362,15 @@
 
         <h2 class="my-5 h3 text-center">Graph</h2>
         <div class="text-center">
-          <button class="btn btn-indigo" id="chartdata">Chart</button>
+          <button class="btn btn-indigo" id="chartdata">Graph New Data</button>
         </div>
         
         <div class="container" style="width: 75%">
           <canvas id="myChart" width="100" height="50"></canvas>        
+        </div>
+
+        <div class="text-center">
+          <button class="btn btn-danger" id="removedata">Remove Last Comparison</button>
         </div>
 
       </section>
