@@ -93,35 +93,44 @@
             }
           });
       });
+      var graph_colors = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+        ];
+      var compare_count = 0
       $('#chartdata').click(function(e) {
-        myChart.data.labels.push(
-            covid_data['state1'] + " Cases", 
-            covid_data['state1'] + " Deaths", 
-            covid_data['state2'] + " Cases", 
-            covid_data['state2'] + " Deaths", 
-        );
         myChart.data.datasets.push({
-          label: covid_data['state1'] +' and ' + covid_data['state2'],
+          label: covid_data['state1'],
           data: [
             covid_data['state1cases'], 
             covid_data['state1deaths'], 
-            covid_data['state2cases'], 
-            covid_data['state2deaths']
             ],
           backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)'
+              graph_colors[compare_count]
+          ],
+        });
+        myChart.data.datasets.push({
+          label: covid_data['state2'],
+          data: [
+            covid_data['state2cases'], 
+            covid_data['state2deaths'], 
+            ],
+          backgroundColor: [
+              graph_colors[compare_count + 1 ]
           ],
         });
         myChart.update();
         $('#removedata').show();
+        if (compare_count == 4) {compare_count = 0} else {compare_count = compare_count + 2}
       })
       $('#removedata').click(function(e) {
-        for (i=0; i<4; i++){
-          myChart.data.labels.pop();
-        }
+        // for (i=0; i<4; i++){
+        //   myChart.data.labels.pop();
+        // }
         myChart.data.datasets.pop();
         myChart.update();
       })
@@ -446,7 +455,7 @@
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            
+          labels: ['Cases', 'Deaths']
         },
         options: {
             scales: {
